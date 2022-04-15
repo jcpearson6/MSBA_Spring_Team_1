@@ -105,4 +105,65 @@ preds <- as.character(model_knn)
 #changing our fbval place id to a character, called actual
 actual <- as.character(fbval$place_id)
 mean(actual == preds)
+# [1] 0.5151964 -- they got
+# [1] 0.8916305 -- we got
+
+# We decided to create two more matrices to determine (using a knn model) what predictors make a 
+# difference in the predictions
+
+# Second Matrix
+create_matrix_1 = function(train) {
+  cbind(s*train$y,
+        train$x,
+        train$hour/l)
+}
+
+X2 = create_matrix_1(fbtrain)
+X2_val = create_matrix_1(fbval)
+
+model_knn2 = knn(train = X2, test = X2_val, cl = fbtrain$place_id, k = 15)
+preds <- as.character(model_knn2)
+actual <- as.character(fbval$place_id)
+mean(actual == preds)
+## [1] 0.51149 -- they got
+## [1] 0.8673368 -- we got
+
+# Third Matrix
+create_matrix_2 = function(train) {
+  cbind(s*train$y,
+        train$x)
+}
+
+X3 = create_matrix_2(fbtrain)
+X3_val = create_matrix_2(fbval)
+
+model_knn3 = knn(train = X3, test = X3_val, cl = fbtrain$place_id, k = 15)
+preds <- as.character(model_knn3)
+actual <- as.character(fbval$place_id)
+mean(actual == preds)
+## [1] 0.4432913 -- they got
+## [1] 0.8204249 -- we got
+
+
+
+
+## Fourth Matrix is not working due to longer object length is not a multiple of shorter object length
+# Fourth Matrix
+#create_matrix_3 = function(train) {
+#  cbind(s*train$y,
+#        train$x,
+#        train$hour/l,
+#        train$accuracy/m)
+#}
+
+#X4 = create_matrix_3(fbtrain)
+#X4_val = create_matrix_3(fbval)
+
+#model_knn4 = knn(train = X4, test = X4_val, cl = fbtrain$place_id, k = 15)
+#preds <- as.character(model_knn4)
+#actual <- as.character(fbval$place_id)
+#mean(actual == preds)
+## [1] 0.4381023
+
+
 
